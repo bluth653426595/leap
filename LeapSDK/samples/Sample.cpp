@@ -54,16 +54,15 @@ void SampleListener::onFrame(const Controller& controller) {
   //           << ", gestures: " << frame.gestures().count() << endl;
 
 
-    int LIFE_HIDE = 0;//hand_to_left
-    int LIFE_SHOW = 1;//hand_to_right
-    int FINGER_CIRCLE = 2;
-    int FINGER_TO_LEFT = 3;
-    int FINGER_TO_RIGHT = 4;
-    int FINGER_TO_UP = 5;
-    int FINGER_TO_DOWN = 6;
-    int FINGER_PRESS = 7;
-
-    int result = -2;
+/*    int LIFE_HIDE = 0;//hand_to_left*/
+    //int LIFE_SHOW = 1;//hand_to_right
+    //int FINGER_CIRCLE = 2;
+    //int FINGER_TO_LEFT = 3;
+    //int FINGER_TO_RIGHT = 4;
+    //int FINGER_TO_UP = 5;
+    //int FINGER_TO_DOWN = 6;
+    //int FINGER_PRESS = 7;
+    //int result = -2;
 
  // Get gestures
   const GestureList gestures = frame.gestures();
@@ -84,7 +83,6 @@ void SampleListener::onFrame(const Controller& controller) {
 
         if(frame.fingers().count() == 1)
         {
-          result = FINGER_CIRCLE;
           emit_dbus_signal("FINGER_CIRCLE");
         }
 
@@ -110,22 +108,18 @@ void SampleListener::onFrame(const Controller& controller) {
         {
           if((start_x - current_x) > 100 && abs(start_y - current_y) < 100)
           {
-            result = FINGER_TO_LEFT;
             emit_dbus_signal("FINGER_TO_LEFT");
 
           }
           else if ((start_x - current_x) < -100 && abs(start_y - current_y) < 100){
-            result = FINGER_TO_RIGHT;
             emit_dbus_signal("FINGER_TO_RIGHT");
           }
 
           if((start_y - current_y) < -300)
           {
-            result = FINGER_TO_UP;
             emit_dbus_signal("FINGER_TO_UP");
           }
           else if ((start_y - current_y) > 300){
-            result = FINGER_TO_DOWN;
             emit_dbus_signal("FINGER_TO_DOWN");
           }
         }
@@ -133,11 +127,9 @@ void SampleListener::onFrame(const Controller& controller) {
         {
           if((start_x - current_x) > 100 && abs(start_y - current_y) < 100)
           {
-            result = LIFE_HIDE;
             emit_dbus_signal("LIFE_HIDE");
           }
           else if ((start_x - current_x) < -100 && abs(start_y - current_y) < 100){
-            result = LIFE_SHOW;
             emit_dbus_signal("LIFE_SHOW");
           }
         }
@@ -146,7 +138,6 @@ void SampleListener::onFrame(const Controller& controller) {
       case Gesture::TYPE_KEY_TAP:
       {
         KeyTapGesture tap = gesture;
-        result = FINGER_PRESS;
         emit_dbus_signal("FINGER_PRESS");
         break;
       }
