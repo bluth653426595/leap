@@ -13,7 +13,7 @@ else
   LEAP_LIBRARY := ../lib/libLeap.dylib
 endif
 Sample: Sample.cpp
-	$(CXX) -Wall -g -I../include Sample.cpp -o Sample $(LEAP_LIBRARY) -Wl,-rpath,../lib/x64 `pkg-config --cflags --libs dbus-1`
+	$(CXX) -Wall -g -I../include Sample.cpp -o Sample $(LEAP_LIBRARY) -Wl,-rpath,../lib/x86 `pkg-config --cflags --libs dbus-1`
 
 ifeq ($(OS), Darwin)
 	install_name_tool -change @loader_path/libLeap.dylib ../lib/libLeap.dylib Sample

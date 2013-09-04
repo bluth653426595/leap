@@ -243,8 +243,8 @@ void SampleListener::emit_dbus_signal(const char *signame )
         return ;
     }
 
-    msg = dbus_message_new_signal ("/com/deepn/lsearch", 
-      "com.deepn.lsearch", signame);
+    msg = dbus_message_new_signal ("/com/deepin/lsearch", 
+      "com.deepin.lsearch", signame);
 
     if ( msg == NULL ) {
         cout<<"msg NULL...\n"<<endl;
