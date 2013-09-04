@@ -26,11 +26,11 @@ class SampleListener : public Listener {
 };
 
 void SampleListener::onInit(const Controller& controller) {
-  std::cout << "Initialized" << std::endl;
+  cout << "Initialized" << endl;
 }
 
 void SampleListener::onConnect(const Controller& controller) {
-  std::cout << "Connected" << std::endl;
+  cout << "Connected" << endl;
   controller.enableGesture(Gesture::TYPE_CIRCLE);
   controller.enableGesture(Gesture::TYPE_KEY_TAP);
   controller.enableGesture(Gesture::TYPE_SCREEN_TAP);
@@ -39,19 +39,19 @@ void SampleListener::onConnect(const Controller& controller) {
 
 void SampleListener::onDisconnect(const Controller& controller) {
   //Note: not dispatched when running in a debugger.
-  std::cout << "Disconnected" << std::endl;
+  cout << "Disconnected" << endl;
 }
 
 void SampleListener::onExit(const Controller& controller) {
-  std::cout << "Exited" << std::endl;
+  cout << "Exited" << endl;
 }
 
 void SampleListener::onFrame(const Controller& controller) {
   // Get the most recent frame and report some basic information
   const Frame frame = controller.frame();
-  // std::cout << ", hands: " << frame.hands().count()
+  // cout << ", hands: " << frame.hands().count()
   //           << ", fingers: " << frame.fingers().count()
-  //           << ", gestures: " << frame.gestures().count() << std::endl;
+  //           << ", gestures: " << frame.gestures().count() << endl;
 
 
     int LIFE_HIDE = 0;//hand_to_left
@@ -73,9 +73,8 @@ void SampleListener::onFrame(const Controller& controller) {
     switch (gesture.type()) {
       case Gesture::TYPE_CIRCLE:
       {
-        // std::cout <<"circle----------";
         CircleGesture circle = gesture;
-        std::string clockwiseness;
+        string clockwiseness;
 
         if (circle.pointable().direction().angleTo(circle.normal()) <= PI/4) {
           clockwiseness = "clockwise";
@@ -83,18 +82,8 @@ void SampleListener::onFrame(const Controller& controller) {
           clockwiseness = "counterclockwise";
         }
 
-        // Calculate angle swept since last frame
-        // float sweptAngle = 0;
-        // if (circle.state() != Gesture::STATE_START) {
-        //   CircleGesture previousUpdate = CircleGesture(controller.frame(1).gesture(circle.id()));
-        //   sweptAngle = (circle.progress() - previousUpdate.progress()) * 2 * PI;
-        // }
-        // float angle = sweptAngle * RAD_TO_DEG;
-        // std::cout << "angle: " << angle << std::endl;
-
         if(frame.fingers().count() == 1)
         {
-          // std::cout << "fingers circle " << std::endl;
           result = FINGER_CIRCLE;
           emit_dbus_signal("FINGER_CIRCLE");
         }
@@ -103,10 +92,9 @@ void SampleListener::onFrame(const Controller& controller) {
       }
       case Gesture::TYPE_SWIPE:
       {
-        // std::cout <<"swipe,";
         SwipeGesture swipe = gesture;
-        // std::cout << "startPosition:" << swipe.startPosition() << std::endl;
-        // std::cout << "currentPosition:" << swipe.position() << std::endl;
+        // cout << "startPosition:" << swipe.startPosition() << endl;
+        // cout << "currentPosition:" << swipe.position() << endl;
 
         float start_x = swipe.startPosition().x;
         float current_x = swipe.position().x;
@@ -120,55 +108,43 @@ void SampleListener::onFrame(const Controller& controller) {
 
         if( hands_count > -1 && fingers_count == 1 && gestures_count == 1 )
         {
-          // std::cout << "fingers------" ;
-          if((start_x - current_x) > 100 && std::abs(start_y - current_y) < 100)
+          if((start_x - current_x) > 100 && abs(start_y - current_y) < 100)
           {
-            // std::cout << "finger to left " << std::endl;
             result = FINGER_TO_LEFT;
             emit_dbus_signal("FINGER_TO_LEFT");
 
           }
-          else if ((start_x - current_x) < -100 && std::abs(start_y - current_y) < 100){
-            // std::cout << "finger to right " << std::endl;
+          else if ((start_x - current_x) < -100 && abs(start_y - current_y) < 100){
             result = FINGER_TO_RIGHT;
             emit_dbus_signal("FINGER_TO_RIGHT");
           }
 
-          if((start_y - current_y) < -100)
+          if((start_y - current_y) < -300)
           {
-            // std::cout << "finger to up " << std::endl;
             result = FINGER_TO_UP;
             emit_dbus_signal("FINGER_TO_UP");
           }
-          else if ((start_y - current_y) > 100){
-            // std::cout << "finger to down " << std::endl;
+          else if ((start_y - current_y) > 300){
             result = FINGER_TO_DOWN;
             emit_dbus_signal("FINGER_TO_DOWN");
           }
-
         }
         else if (hands_count > 0 && fingers_count > 1 && gestures_count > 1)
         {
-          // std::cout << "hand-------" ;
-          if((start_x - current_x) > 100 && std::abs(start_y - current_y) < 100)
+          if((start_x - current_x) > 100 && abs(start_y - current_y) < 100)
           {
-            // std::cout << "hand to left " << std::endl;
             result = LIFE_HIDE;
             emit_dbus_signal("LIFE_HIDE");
           }
-          else if ((start_x - current_x) < -100 && std::abs(start_y - current_y) < 100){
-            // std::cout << "hand to right " << std::endl;
+          else if ((start_x - current_x) < -100 && abs(start_y - current_y) < 100){
             result = LIFE_SHOW;
             emit_dbus_signal("LIFE_SHOW");
           }
-
         }
-
         break;
       }
       case Gesture::TYPE_KEY_TAP:
       {
-        // std::cout <<"key_tap";
         KeyTapGesture tap = gesture;
         result = FINGER_PRESS;
         emit_dbus_signal("FINGER_PRESS");
@@ -176,31 +152,28 @@ void SampleListener::onFrame(const Controller& controller) {
       }
       case Gesture::TYPE_SCREEN_TAP:
       {
-        std::cout <<"screen_tap";
+        cout <<"screen_tap";
         ScreenTapGesture screentap = gesture;
         break;
       }
       default:
-        std::cout << "Unknown gesture type." << std::endl;
-        //result = LEAP_INVALIABLE;
-        // emit_dbus_signal("LEAP_INVALIABLE");
+        cout << "Unknown gesture type." << endl;
         break;
     }
   }
 
-  if (!frame.hands().empty() || !gestures.empty()) {
-    std::cout << std::endl;
-  }
-
+/*  if (!frame.hands().empty() || !gestures.empty()) {*/
+    //cout << endl;
+  //}
   
 }
 
 void SampleListener::onFocusGained(const Controller& controller) {
-  std::cout << "Focus Gained" << std::endl;
+  cout << "Focus Gained" << endl;
 }
 
 void SampleListener::onFocusLost(const Controller& controller) {
-  std::cout << "Focus Lost" << std::endl;
+  cout << "Focus Lost" << endl;
 }
 
 int main() {
@@ -212,8 +185,8 @@ int main() {
   controller.addListener(listener);
 
   // Keep this process running until Enter is pressed
-  std::cout << "Press Enter to quit..." << std::endl;
-  std::cin.get();
+  cout << "Press Enter to quit..." << endl;
+  cin.get();
 
   // Remove the sample listener when done
   controller.removeListener(listener);
@@ -226,7 +199,6 @@ void SampleListener::emit_dbus_signal(const char *signame )
     DBusConnection *dbus_conn = NULL;
     DBusError dbus_err;
     DBusMessage *msg = NULL;
-    // DBusMessageIter args;
 
     dbus_error_init(&dbus_err);
     dbus_conn = dbus_bus_get(DBUS_BUS_SESSION, &dbus_err);
@@ -237,7 +209,7 @@ void SampleListener::emit_dbus_signal(const char *signame )
     }
 
     if ( dbus_conn == NULL ) {
-        cout<<"conn NULL...\n"<<endl;
+        cout<<"conn NULL..."<<endl;
         return ;
     }
 
@@ -245,7 +217,7 @@ void SampleListener::emit_dbus_signal(const char *signame )
       "com.deepn.lsearch", signame);
 
     if ( msg == NULL ) {
-        cout<<"msg NULL...\n"<<endl;
+        cout<<"msg NULL..."<<endl;
         return ;
     }
 
