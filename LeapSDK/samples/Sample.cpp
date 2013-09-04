@@ -54,7 +54,6 @@ void SampleListener::onFrame(const Controller& controller) {
   //           << ", gestures: " << frame.gestures().count() << std::endl;
 
 
-    int LEAP_INVALIABLE = -1;
     int LIFE_HIDE = 0;//hand_to_left
     int LIFE_SHOW = 1;//hand_to_right
     int FINGER_CIRCLE = 2;
@@ -63,7 +62,6 @@ void SampleListener::onFrame(const Controller& controller) {
     int FINGER_TO_UP = 5;
     int FINGER_TO_DOWN = 6;
     int FINGER_PRESS = 7;
-
 
     int result = -2;
 
