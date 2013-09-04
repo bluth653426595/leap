@@ -86,11 +86,11 @@ void SampleListener::onFrame(const Controller& controller) {
         }
 
         // Calculate angle swept since last frame
-        float sweptAngle = 0;
-        if (circle.state() != Gesture::STATE_START) {
-          CircleGesture previousUpdate = CircleGesture(controller.frame(1).gesture(circle.id()));
-          sweptAngle = (circle.progress() - previousUpdate.progress()) * 2 * PI;
-        }
+        // float sweptAngle = 0;
+        // if (circle.state() != Gesture::STATE_START) {
+        //   CircleGesture previousUpdate = CircleGesture(controller.frame(1).gesture(circle.id()));
+        //   sweptAngle = (circle.progress() - previousUpdate.progress()) * 2 * PI;
+        // }
         // float angle = sweptAngle * RAD_TO_DEG;
         // std::cout << "angle: " << angle << std::endl;
 
@@ -98,7 +98,7 @@ void SampleListener::onFrame(const Controller& controller) {
         {
           // std::cout << "fingers circle " << std::endl;
           result = FINGER_CIRCLE;
-
+          emit_dbus_signal("FINGER_CIRCLE");
         }
 
         break;
@@ -234,12 +234,12 @@ void SampleListener::emit_dbus_signal(const char *signame )
     dbus_conn = dbus_bus_get(DBUS_BUS_SESSION, &dbus_err);
 
     if ( dbus_error_is_set(&dbus_err) ) {
-        // sys_err("get conn error : %s\n", dbus_err.message);
+        cout<<"get conn error : "<<dbus_err.message<<endl;
         dbus_error_free(&dbus_err);
     }
 
     if ( dbus_conn == NULL ) {
-        // sys_err("conn NULL...\n");
+        cout<<"conn NULL...\n"<<endl;
         return ;
     }
 
@@ -247,13 +247,13 @@ void SampleListener::emit_dbus_signal(const char *signame )
       "com.deepn.lsearch", signame);
 
     if ( msg == NULL ) {
-        // sys_err("msg NULL...\n");
+        cout<<"msg NULL...\n"<<endl;
         return ;
     }
 
     //send message
     if ( !dbus_connection_send(dbus_conn, msg, NULL) ) {
-        // sys_err("Out Of Memory!\n");
+        cout<<"Out of Memory !"<<endl;
         return ;
     }
 
