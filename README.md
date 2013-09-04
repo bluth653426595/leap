@@ -1,4 +1,6 @@
 leap
 ====
 
-leap motion for linuxdeepin DAU
+leap motion 
+Depends:
+sudo apt-get install leap
