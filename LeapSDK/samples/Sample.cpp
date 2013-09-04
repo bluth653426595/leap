@@ -182,7 +182,7 @@ void SampleListener::onFrame(const Controller& controller) {
       }
       default:
         std::cout << "Unknown gesture type." << std::endl;
-        result = LEAP_INVALIABLE;
+        //result = LEAP_INVALIABLE;
         // emit_dbus_signal("LEAP_INVALIABLE");
         break;
     }
