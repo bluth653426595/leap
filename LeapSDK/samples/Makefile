@@ -1,6 +1,6 @@
 OS := $(shell uname)
 ARCH := $(shell uname -m)
-
+PROG_NAME = TestSample
 
 ifeq ($(OS), Linux)
   ifeq ($(ARCH), x86_64)
@@ -12,12 +12,17 @@ else
   # OS X
   LEAP_LIBRARY := ../lib/libLeap.dylib
 endif
-Sample: Sample.cpp
-	$(CXX) -Wall -g -I../include Sample.cpp -o Sample $(LEAP_LIBRARY) `pkg-config --cflags --libs dbus-1`
+
+all: ${PROG_NAME}
+
+${PROG_NAME}: Sample.cpp
+	$(CXX) -Wall -g -I../include $^ -o $@ $(LEAP_LIBRARY) `pkg-config --cflags --libs dbus-1`
 
 ifeq ($(OS), Darwin)
 	install_name_tool -change @loader_path/libLeap.dylib ../lib/libLeap.dylib Sample
 endif
 
 clean:
-	rm -rf Sample Sample.dSYM
+	rm -rf ${PROG_NAME} Sample.dSYM
+
+rebuild: clean all
