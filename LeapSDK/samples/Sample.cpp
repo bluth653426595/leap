@@ -83,7 +83,7 @@ void SampleListener::onFrame(const Controller& controller) {
 
         if(frame.fingers().count() == 1)
         {
-          emit_dbus_signal("FINGER_CIRCLE");
+          emit_dbus_signal("FingerCircle");
         }
 
         break;
@@ -108,29 +108,29 @@ void SampleListener::onFrame(const Controller& controller) {
         {
           if((start_x - current_x) > 100 && abs(start_y - current_y) < 100)
           {
-            emit_dbus_signal("FINGER_TO_LEFT");
+            emit_dbus_signal("FingerLeft");
 
           }
           else if ((start_x - current_x) < -100 && abs(start_y - current_y) < 100){
-            emit_dbus_signal("FINGER_TO_RIGHT");
+            emit_dbus_signal("FingerRight");
           }
 
           if((start_y - current_y) < -300)
           {
-            emit_dbus_signal("FINGER_TO_UP");
+            emit_dbus_signal("FingerUp");
           }
           else if ((start_y - current_y) > 300){
-            emit_dbus_signal("FINGER_TO_DOWN");
+            emit_dbus_signal("FingerDown");
           }
         }
         else if (hands_count > 0 && fingers_count > 1 && gestures_count > 1)
         {
           if((start_x - current_x) > 100 && abs(start_y - current_y) < 100)
           {
-            emit_dbus_signal("LIFE_HIDE");
+            emit_dbus_signal("HandLeft");
           }
           else if ((start_x - current_x) < -100 && abs(start_y - current_y) < 100){
-            emit_dbus_signal("LIFE_SHOW");
+            emit_dbus_signal("HandRight");
           }
         }
         break;
@@ -138,7 +138,7 @@ void SampleListener::onFrame(const Controller& controller) {
       case Gesture::TYPE_KEY_TAP:
       {
         KeyTapGesture tap = gesture;
-        emit_dbus_signal("FINGER_PRESS");
+        emit_dbus_signal("FingerClick");
         break;
       }
       case Gesture::TYPE_SCREEN_TAP:
