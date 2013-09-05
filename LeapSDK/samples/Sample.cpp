@@ -64,6 +64,9 @@ void SampleListener::onFrame(const Controller& controller) {
     //int FINGER_PRESS = 7;
     //int result = -2;
 
+//Get Screen
+ //const ScreenList screen = frame.
+
  // Get gestures
   const GestureList gestures = frame.gestures();
   for (int g = 0; g < gestures.count(); ++g) {
@@ -138,7 +141,11 @@ void SampleListener::onFrame(const Controller& controller) {
       case Gesture::TYPE_KEY_TAP:
       {
         KeyTapGesture tap = gesture;
-        emit_dbus_signal("FingerClick");
+        int fingers_count = frame.fingers().count();
+        if(fingers_count == 1)
+        {
+            emit_dbus_signal("FingerClick");
+        }            
         break;
       }
       case Gesture::TYPE_SCREEN_TAP:
