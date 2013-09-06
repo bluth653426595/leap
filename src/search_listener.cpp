@@ -73,6 +73,7 @@ void SearchListener::onFrame(const Controller& controller)
 
             break;
         }
+
         case Gesture::TYPE_SWIPE: {
             SwipeGesture swipe = gesture;
 
@@ -84,6 +85,7 @@ void SearchListener::onFrame(const Controller& controller)
             int hands_count = frame.hands().count();
 
             if (fingers_count == 1 && gestures_count == 1) {
+                // figner move <--/-->
                 if ((start.x - current.x) > X_MIN_DISTANCE
                     && abs(start.y - current.y) < X_MIN_DISTANCE) {
                     emit_dbus_signal("FingerLeft");
@@ -93,11 +95,15 @@ void SearchListener::onFrame(const Controller& controller)
                     emit_dbus_signal("FingerRight");
                 }
 
+                // figner move
+                // ^  / |
+                // | /  v
                 if ((start.y - current.y) < -Y_MIN_DISTANCE) {
                     emit_dbus_signal("FingerUp");
                 } else if ((start.y - current.y) > Y_MIN_DISTANCE) {
                     emit_dbus_signal("FingerDown");
                 }
+
             } else if (fingers_count > 1 && gestures_count > 1
                        && abs(start.y - current.y) < X_MIN_DISTANCE) {
                 if ((start.x - current.x) > X_MIN_DISTANCE) {
@@ -109,6 +115,7 @@ void SearchListener::onFrame(const Controller& controller)
 
             break;
         }
+
         case Gesture::TYPE_KEY_TAP: {
             KeyTapGesture tap = gesture;
             int fingers_count = frame.fingers().count();
@@ -119,16 +126,12 @@ void SearchListener::onFrame(const Controller& controller)
 
             break;
         }
+
         default:
             cout << "Unknown gesture type." << endl;
             break;
         }
     }
-
-    /*  if (!frame.hands().empty() || !gestures.empty()) {*/
-    //cout << endl;
-    //}
-
 }
 
 void SearchListener::onFocusGained(const Controller& controller)
@@ -162,7 +165,8 @@ void SearchListener::emit_dbus_signal(const string& signame)
     }
 
     msg = dbus_message_new_signal("/com/deepin/lsearch",
-                                  "com.deepin.lsearch", signame.c_str());
+                                  "com.deepin.lsearch",
+                                  signame.c_str());
 
     if (msg == NULL) {
         cout << "msg NULL..." << endl;
