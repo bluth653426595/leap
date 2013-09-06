@@ -84,25 +84,25 @@ void SearchListener::onFrame(const Controller& controller)
             int hands_count = frame.hands().count();
 
             if (fingers_count == 1 && gestures_count == 1) {
-                if ((start.x - current.x) > 100
-                    && abs(start.y - current.y) < 100) {
+                if ((start.x - current.x) > X_MIN_DISTANCE
+                    && abs(start.y - current.y) < X_MIN_DISTANCE) {
                     emit_dbus_signal("FingerLeft");
 
-                } else if ((start.x - current.x) < -100
-                           && abs(start.y - current.y) < 100) {
+                } else if ((start.x - current.x) < -X_MIN_DISTANCE
+                           && abs(start.y - current.y) < X_MIN_DISTANCE) {
                     emit_dbus_signal("FingerRight");
                 }
 
-                if ((start.y - current.y) < -300) {
+                if ((start.y - current.y) < -Y_MIN_DISTANCE) {
                     emit_dbus_signal("FingerUp");
-                } else if ((start.y - current.y) > 300) {
+                } else if ((start.y - current.y) > Y_MIN_DISTANCE) {
                     emit_dbus_signal("FingerDown");
                 }
             } else if (fingers_count > 1 && gestures_count > 1
-                       && abs(start.y - current.y) < 100) {
-                if ((start.x - current.x) > 100) {
+                       && abs(start.y - current.y) < X_MIN_DISTANCE) {
+                if ((start.x - current.x) > X_MIN_DISTANCE) {
                     emit_dbus_signal("HandLeft");
-                } else if ((start.x - current.x) < -100) {
+                } else if ((start.x - current.x) < -X_MIN_DISTANCE) {
                     emit_dbus_signal("HandRight");
                 }
             }

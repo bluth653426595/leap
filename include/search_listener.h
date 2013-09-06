@@ -8,6 +8,7 @@
 
 class SearchListener : public Leap::Listener {
 public:
+    enum Distance { X_MIN_DISTANCE = 100, Y_MIN_DISTANCE = 100 };
     virtual void onInit(const Leap::Controller&);
     virtual void onConnect(const Leap::Controller&);
     virtual void onDisconnect(const Leap::Controller&);
