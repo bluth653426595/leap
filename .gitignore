@@ -1,2 +1,5 @@
-*.swp
-LeapSDK/samples/TestSample
+build/
+\#.*\#
+*.sw[po]
+core
+*.orig
